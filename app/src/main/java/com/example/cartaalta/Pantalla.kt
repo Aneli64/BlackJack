@@ -35,10 +35,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 
-@Preview
+//@Preview
 @Composable
-fun Juego() {
+fun modoJuego(navController: NavHostController) {
     //Variables necesarias para nuestro juego
     val context = LocalContext.current
     var dorsoCarta by rememberSaveable { mutableStateOf("detras") }
@@ -65,44 +66,113 @@ fun Juego() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row {
-            Image(
-                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
-            )
-            Image(
-                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
-            )
+            Text(text = "Seleccione modo de juego")
         }
+        Row(Modifier.padding(10.dp)) {
+            Button(
+                onClick = { navController.navigate(Routes.Pantalla2.route) },
+                Modifier
+                    .padding(10.dp)
+                    .border(2.dp, color = Color.Red, shape = CircleShape),
+                colors = ButtonDefaults.textButtonColors(Color.White)
+            ) {
+                Text(
+                    text = "Contra crupier",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
+        }
+        Row(Modifier.padding(10.dp)) {
+            Button(
+                onClick = {},
+                Modifier
+                    .padding(10.dp)
+                    .border(2.dp, color = Color.Red, shape = CircleShape),
+                colors = ButtonDefaults.textButtonColors(Color.White)
+            ) {
+                Text(
+                    text = "2 jugadores",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Juego() {
+    //Variables necesarias para nuestro juego
+    val context = LocalContext.current
+    var dorsoCarta by rememberSaveable { mutableStateOf("detras") }
+    var idCarta by rememberSaveable {
+        mutableStateOf(
+            context.resources.getIdentifier(
+                dorsoCarta,
+                "drawable",
+                context.packageName
+            )
+        )
+    }
+    //Imagen de fondo
+    Image(
+        painter = painterResource(id = R.drawable.fondo_poker), contentDescription = "",
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(painterResource(id = idCarta))
+    )
+
+    Baraja.crearBaraja()
+    var jugador1 = Jugador("jugador", listOf())
+    var crupier = Jugador("crupier", listOf())
+
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Row {
             Image(
-                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
+                painter = painterResource(id = idCarta),
+                contentDescription = "",
+                Modifier.size(120.dp)
             )
             Image(
-                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
+                painter = painterResource(id = idCarta),
+                contentDescription = "",
+                Modifier.size(120.dp)
             )
         }
-        Row (Modifier.padding(10.dp)){
-            Button(onClick = {
-                //Si se acaba nuestra baraja, vuelve a crear una nueva (para que no cierre el programa)
-                Baraja.barajar()
-                if (Baraja.listaCartas.size == 0){
-                    Baraja.crearBaraja()
-                    dorsoCarta = "detras"
-                }
-                val carta = Baraja.dameCarta()
-                dorsoCarta = "c${carta.idDrawable}"
-                println("$carta || $dorsoCarta || ${Baraja.listaCartas.size}")
 
-            },Modifier.padding(10.dp).border(2.dp, color = Color.Red, shape = CircleShape), colors = ButtonDefaults.textButtonColors(Color.White)) {
-                Text(text = "Dame carta", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            }
+        Row(Modifier.padding(10.dp)) {
+            Button(
+                onClick = {
+                    //Si se acaba nuestra baraja, vuelve a crear una nueva (para que no cierre el programa)
+                    Baraja.barajar()
+                    if (Baraja.listaCartas.size == 0) {
+                        Baraja.crearBaraja()
+                        dorsoCarta = "detras"
+                    }
+                    val carta = Baraja.dameCarta()
+                    dorsoCarta = "c${carta.idDrawable}"
+                    println("$carta || $dorsoCarta || ${Baraja.listaCartas.size}")
 
-            //Boton quen os baraja nuestras cartas y pone de nuevo la carta boca abajo
-            Button(onClick = {
-                Baraja.crearBaraja()
-                Baraja.barajar()
-                dorsoCarta = "detras"
-            },Modifier.padding(10.dp).border(2.dp, color = Color.Red, shape = CircleShape), colors = ButtonDefaults.textButtonColors(Color.White)) {
-                Text(text = "Reiniciar", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                },
+                Modifier
+                    .padding(10.dp)
+                    .border(2.dp, color = Color.Red, shape = CircleShape),
+                colors = ButtonDefaults.textButtonColors(Color.White)
+            ) {
+                Text(
+                    text = "Dame carta",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
             }
         }
         //Metodo que nos permite ir actualizando las cartas

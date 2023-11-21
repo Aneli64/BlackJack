@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -65,7 +66,18 @@ fun Juego() {
     ) {
         Row {
             Image(
-                painter = painterResource(id = idCarta), contentDescription = ""
+                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
+            )
+            Image(
+                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
+            )
+        }
+        Row {
+            Image(
+                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
+            )
+            Image(
+                painter = painterResource(id = idCarta), contentDescription = "", Modifier.size(120.dp)
             )
         }
         Row (Modifier.padding(10.dp)){

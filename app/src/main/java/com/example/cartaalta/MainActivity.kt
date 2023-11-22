@@ -22,8 +22,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //creamos baraja de cartas
-                    //Baraja.crearBaraja()
+                    Baraja.crearBaraja()
+                    Baraja.barajar()
                     //creamos variable controller para movernos por las pantallas
                     val navController = rememberNavController()
                     NavHost(
@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Routes.Pantalla1.route) { modoJuego(navController) }
                         composable(Routes.Pantalla2.route) { Juego() }
-                        //Juego()
                     }
                 }
             }

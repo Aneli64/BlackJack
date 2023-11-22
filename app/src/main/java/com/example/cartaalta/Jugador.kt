@@ -1,11 +1,7 @@
 package com.example.cartaalta
-class Jugador (var nombre: String, var mano: List<Carta>){ //faltaria añadir fichas
 
-    fun rellenaMano(){
-        mano = listOf(Baraja.dameCarta(), Baraja.dameCarta())
-    }
+import androidx.compose.runtime.Composable
 
-    fun pedirCartaCond(){
+class Jugador (var nombre: String, var mano: MutableList<Int>){ //faltaria añadir fichas
 
-    }
 }

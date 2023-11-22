@@ -1,6 +1,5 @@
-package com.example.cartaalta
+package com.example.cartaalta.funciones
 
-import androidx.compose.runtime.Composable
 
 class Jugador (var nombre: String, var mano: MutableList<Int>){ //faltaria añadir fichas
 

@@ -1,4 +1,4 @@
-package com.example.cartaalta
+package com.example.cartaalta.funciones
 
 /**
  * Enum de palos de cartas

@@ -1,4 +1,4 @@
-package com.example.cartaalta
+package com.example.cartaalta.funciones
 
 /**
  * Clase donde se almacena nuestra carta

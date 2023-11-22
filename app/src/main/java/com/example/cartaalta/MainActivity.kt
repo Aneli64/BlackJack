@@ -10,6 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cartaalta.Screens.ChooseGameMode
+import com.example.cartaalta.Screens.Juego
+import com.example.cartaalta.funciones.Baraja
+import com.example.cartaalta.modelo.Routes
 import com.example.cartaalta.ui.theme.CartaAltaTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,8 +33,9 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController, startDestination = Routes.Pantalla1.route
                     ) {
-                        composable(Routes.Pantalla1.route) { modoJuego(navController) }
+                        composable(Routes.Pantalla1.route) { ChooseGameMode(navController) }
                         composable(Routes.Pantalla2.route) { Juego() }
+                        composable(Routes.Pantalla3.route) { Juego() } //hay que poner el modo banca
                     }
                 }
             }

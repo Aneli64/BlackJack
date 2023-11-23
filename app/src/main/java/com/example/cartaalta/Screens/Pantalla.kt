@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.cartaalta.funciones.Baraja
 import com.example.cartaalta.R
-import com.example.cartaalta.funciones.Carta
 import com.example.cartaalta.funciones.Jugador
 import com.example.cartaalta.modelo.Routes
 
@@ -175,6 +174,10 @@ fun Juego() {
     var puntPlayer1 by remember { mutableStateOf(0) }
     var puntPlayer2 by remember { mutableStateOf(0) }
 
+
+    //Variable que controla si nuestro boton es pulsado para almacenar la opcion de pasar
+    var btnPasarIsClicked by remember { mutableStateOf(false) }
+
     imprimeBucles(player1 = player1, player2 = player2, context = context)
 
     Column(
@@ -185,44 +188,63 @@ fun Juego() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        dameCarta(onDameCartaClick = {
-            val carta = Baraja.dameCarta()
-            if (playerTurn1) {
-                dorsoCarta = "c${carta.idDrawable}"
-                player1.mano.add(carta.idDrawable)
-                playerTurn1 = false
-                playerTurn2 = true
-                /*puntPlayer1 += carta.puntosMin
-                if (puntPlayer1 >= 21) println("GANASTE JUGADOR1")*/
-                sumarPuntosJugador(puntPlayer1, carta)
-                puntPlayer1 += carta.puntosMin //LAMBDA??????
+        Row {
+            dameCarta(onDameCartaClick = {
+                val carta = Baraja.dameCarta()
+
+                if (playerTurn1 || btnPasarIsClicked) {
+                    dorsoCarta = "c${carta.idDrawable}"
+                    player1.mano.add(carta.idDrawable)
+                    playerTurn1 = false
+                    playerTurn2 = true
+                    puntPlayer1 += carta.puntosMin
+                    if (puntPlayer1 >= 21) println("GANASTE JUGADOR1")
 
 
-            } else if (playerTurn2) {
-                dorsoCarta = "c${carta.idDrawable}"
-                player2.mano.add(carta.idDrawable)
-                playerTurn1 = true
-                playerTurn2 = false
-                /*puntPlayer2 += carta.puntosMin
-                if (puntPlayer2 >= 21) println("GANASTE JUGADOR2")*/
-                sumarPuntosJugador(puntPlayer2, carta)
-                puntPlayer2 += carta.puntosMin//LAMBDA??????
-            }
-        })
+                } else if (playerTurn2 || btnPasarIsClicked) {
+                    dorsoCarta = "c${carta.idDrawable}"
+                    player2.mano.add(carta.idDrawable)
+                    playerTurn1 = true
+                    playerTurn2 = false
+                    puntPlayer2 += carta.puntosMin
+                    if (puntPlayer2 >= 21) println("GANASTE JUGADOR2")
+                }
+            })
 
-
-        //Metodo que nos permite ir actualizando las cartas
-        LaunchedEffect(dorsoCarta) {
-            val id = context.resources.getIdentifier(dorsoCarta, "drawable", context.packageName)
-            idCarta = id
+            pasar(
+                onPasaClick = {
+                    if (playerTurn1){
+                        playerTurn1 = false
+                        playerTurn2 = true
+                        //definimos isClicked a false para que el jug no pueda pedir cartas de nuevo
+                        btnPasarIsClicked = true
+                    } else if (playerTurn2) {
+                        playerTurn1 = true
+                        playerTurn2 = false
+                        //definimos isClicked a false para que el jug no pueda pedir cartas de nuevo
+                        btnPasarIsClicked = true
+                    }
+                    //HAY QUE DESACTIVAR EL BOTON!!!!!
+                })
         }
+
+        turnoJugador(turnoJug1 = playerTurn1)
     }
+
+    //Metodo que nos permite ir actualizando las cartas
+    LaunchedEffect(dorsoCarta) {
+        val id = context.resources.getIdentifier(dorsoCarta, "drawable", context.packageName)
+        idCarta = id
+    }
+
 
 }
 
-fun sumarPuntosJugador(puntosPlayer:Int, carta: Carta){
-    val updatePuntos = puntosPlayer + carta.puntosMin
-    if (updatePuntos >= 21) println("GANASTE JUGADOR2") //TIENE QUE SER EL JUGADOR QUE GANA
+//Funcion que nos muestra el turno de cada jugador
+@Composable
+fun turnoJugador(turnoJug1: Boolean){
+    if (turnoJug1) Text(text = "Turno Jugador 1") else Text(text = "Turno Jugador 2")
+
 }
 
 //Funcion lambda que al pulsar en el boton dame carta, obtiene una carta de la baraja
@@ -240,6 +262,28 @@ fun dameCarta(onDameCartaClick: () -> Unit) {
         ) {
             Text(
                 text = "Dame carta",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun pasar(onPasaClick: () -> Unit) {
+    Row(Modifier.padding(10.dp)) {
+        Button(
+            onClick = {
+                onPasaClick()
+            },
+            Modifier
+                .padding(10.dp)
+                .border(2.dp, color = Color.Red, shape = CircleShape),
+            colors = ButtonDefaults.textButtonColors(Color.White)
+        ) {
+            Text(
+                text = "Pasar",
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
